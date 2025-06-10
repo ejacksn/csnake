@@ -51,10 +51,19 @@ SnakeNode* create_snake(int y, int x, Direction dir) {
     snake->y=y;
     snake->x=x;
     snake->dir=dir;
+    snake->next=NULL;
     return snake;
 }
 
 void update_snake(SnakeNode* head, Direction dir){
+
+    //get prior location and direction of snake head
+    int prev_x = head->x;
+    int prev_y = head->y;
+    Direction prev_dir = head->dir;
+
+
+
 
     switch(dir) {//swich to modify position  bsed on
         case UP:
@@ -73,14 +82,77 @@ void update_snake(SnakeNode* head, Direction dir){
 
     head->dir=dir; //set direction of head so we can use it for following body segments
 
+
+
+
+
+
+    if (head->next) {
+
+        SnakeNode* current=head->next;
+
+
+
+
+
+
+
+        while (current) {
+            //tempt variables so we dont lose components of current node
+            int temp_y = current->y;
+            int temp_x = current->x;
+            Direction temp_dir = current->dir;
+
+            current->y = prev_y;
+            current->x = prev_x;
+            current->dir=prev_dir;
+
+
+            prev_x=temp_x;
+            prev_y=temp_y;
+            prev_dir=temp_dir;
+            current=current->next;
+        }
+    }
+
+
+
 }
 
-void mark_snake(char board[ROWS][COLS], SnakeNode* head) {
+void mark_snake(char board[ROWS][COLS], SnakeNode* head) { //modify board memory to have current snake in it
     SnakeNode* current = head; //pointer to iterate through snake
     while (current!=NULL) {
         board[current->y][current->x] = '0';
         current = current->next; //move pointer
     }
+}
+
+SnakeNode* get_tail(SnakeNode* head) {
+    SnakeNode* current = head;
+    while (current->next!=NULL) {
+        current = current->next;
+    }
+    return current;
+}
+
+void lengthen_snake(SnakeNode* head) {
+    SnakeNode* tail = get_tail(head);
+    int modify_x = 0;
+    int modify_y = 0;
+    switch (tail->dir) { //find
+        case UP: modify_y++; break;
+        case DOWN: modify_y--; break;
+        case LEFT: modify_x++; break;
+        case RIGHT: modify_x--; break;
+    }
+    SnakeNode* new_segment = malloc(sizeof(SnakeNode));
+    tail->next = new_segment;
+    new_segment->y = tail->y+modify_y;
+    new_segment->x = tail->x+modify_x;
+    new_segment->dir = tail->dir;
+    new_segment->next=NULL;
+
+
 }
 
 
@@ -114,6 +186,8 @@ int main(void) {
                 snake_dir=RIGHT; break;
             case 'q':
                 running = 0;break;
+            case 'g':
+                lengthen_snake(snake); break;
 
         }
 
