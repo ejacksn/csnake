@@ -112,6 +112,9 @@ int main(void) {
                 snake_dir=LEFT; break;
             case KEY_RIGHT:
                 snake_dir=RIGHT; break;
+            case 'q':
+                running = 0;break;
+
         }
 
         create_board(board);
@@ -127,6 +130,10 @@ int main(void) {
 
 
     }
+
+    endwin();
+    printf("Game closed.\n");
+
 
 
 return 0;
