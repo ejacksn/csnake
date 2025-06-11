@@ -182,6 +182,7 @@ int main(void) {
     int score = 0;
     int* score_pointer=&score;
 
+    create_board(board);
     Apple apple = create_apple(board);
 
 
@@ -189,7 +190,9 @@ int main(void) {
 
     initscr();
     keypad(stdscr, TRUE);   // Enable reading arrow keys
-
+    cbreak(); //unbuffered input
+    noecho(); //make it so user doesn't actually type
+    nodelay(stdscr, TRUE); // make it so inputs aren't blocking anymore (not frame by frame)
 
     int running = 1;
     Direction snake_dir = RIGHT;
@@ -229,7 +232,7 @@ int main(void) {
             apple = create_apple(board);
         }
 
-        napms(100);
+        napms(150);
         refresh();
 
 
