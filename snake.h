@@ -25,7 +25,7 @@ void update_snake(SnakeNode* head, Direction dir); //importing file needs fucnti
 
 
 
-void lengthen_snake(SnakeNode* head); //implement funciton to grow snake
+void lengthen_snake(SnakeNode* head, int* score); //implement funciton to grow snake
 void free_snake(SnakeNode* head);
 
 

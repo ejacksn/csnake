@@ -3,11 +3,19 @@
 #include <stdlib.h>
 
 #include "snake.h"
+#include <time.h>
 
 #define ROWS 11
 #define COLS 25
 
 /* BOARD FUNCTIONS*/
+
+typedef struct {
+    int x_pos;
+    int y_pos;
+
+
+} Apple;
 
 void create_board(char board[ROWS][COLS]){
     int x,y =  0;
@@ -135,7 +143,7 @@ SnakeNode* get_tail(SnakeNode* head) {
     return current;
 }
 
-void lengthen_snake(SnakeNode* head) {
+void lengthen_snake(SnakeNode* head, int* score) {
     SnakeNode* tail = get_tail(head);
     int modify_x = 0;
     int modify_y = 0;
@@ -151,15 +159,30 @@ void lengthen_snake(SnakeNode* head) {
     new_segment->x = tail->x+modify_x;
     new_segment->dir = tail->dir;
     new_segment->next=NULL;
+    (*score)++;
 
 
 }
 
+Apple create_apple(char board[ROWS][COLS]) {
+    Apple apple;
+    do { //if the apple spawns on an occupied tile move it
+        apple.x_pos=rand()%COLS; //random x pos for apple
+        apple.y_pos=rand()%ROWS; //random y pos
+    } while (board[apple.y_pos][apple.x_pos]!=' ');
+
+    return apple;
+}
+
 
 int main(void) {
-
+    srand(time(NULL));// set the randomness
     char board[ROWS][COLS];   //board is 2D array
     SnakeNode* snake = create_snake(ROWS/2, COLS/2, LEFT);
+    int score = 0;
+    int* score_pointer=&score;
+
+    Apple apple = create_apple(board);
 
 
 
@@ -187,14 +210,24 @@ int main(void) {
             case 'q':
                 running = 0;break;
             case 'g':
-                lengthen_snake(snake); break;
+                lengthen_snake(snake, &score); break;
 
         }
 
         create_board(board);
         update_snake(snake, snake_dir);
         mark_snake(board, snake);
+        board[apple.y_pos][apple.x_pos]='@';
         draw_board(board);
+
+        if (snake->y ==ROWS-1 || snake->y==0 ||snake->x ==COLS-1 || snake->x==0) {
+            break;
+        }
+
+        if (snake->y == apple.y_pos && snake->x== apple.x_pos ) {
+            lengthen_snake(snake, &score);
+            apple = create_apple(board);
+        }
 
         napms(100);
         refresh();
@@ -206,7 +239,7 @@ int main(void) {
     }
 
     endwin();
-    printf("Game closed.\n");
+    printf("Score: %d\n", score);
 
 
 
