@@ -174,6 +174,38 @@ Apple create_apple(char board[ROWS][COLS]) {
     return apple;
 }
 
+int self_collision(SnakeNode* head) {
+
+    if (head->next) {
+
+        SnakeNode* current = head->next;
+        do {
+            if (current->x == head->x && current->y == head->y) { //if head overlapsn with another snake segment return 1
+                return 1;
+            }
+            current = current->next;
+
+        } while (current!=NULL);
+
+
+    }
+    return 0;
+}
+
+void free_snake(SnakeNode* head) {
+    SnakeNode* current = head;
+
+
+        while (current->next) {
+            SnakeNode* next_segment = current->next;
+            free(current);
+            current=next_segment;
+        }
+
+
+
+}
+
 
 int main(void) {
     srand(time(NULL));// set the randomness
@@ -223,7 +255,7 @@ int main(void) {
         board[apple.y_pos][apple.x_pos]='@';
         draw_board(board);
 
-        if (snake->y ==ROWS-1 || snake->y==0 ||snake->x ==COLS-1 || snake->x==0) {
+        if (snake->y ==ROWS-1 || snake->y==0 ||snake->x ==COLS-1 || snake->x==0 || self_collision(snake)==1) {//if collide with board or self, end game loop
             break;
         }
 
@@ -240,7 +272,7 @@ int main(void) {
 
 
     }
-
+    free_snake(snake);
     endwin();
     printf("Score: %d\n", score);
 
