@@ -1,0 +1,1 @@
+/usr/bin/cc CMakeFiles/csnake.dir/main.c.o -o csnake  -lncurses 

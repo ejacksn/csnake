@@ -1,0 +1,3 @@
+/home/ejacksn/CLionProjects/csnake/build/CMakeFiles/csnake.dir
+/home/ejacksn/CLionProjects/csnake/build/CMakeFiles/edit_cache.dir
+/home/ejacksn/CLionProjects/csnake/build/CMakeFiles/rebuild_cache.dir

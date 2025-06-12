@@ -244,9 +244,10 @@ int main(void) {
                 snake_dir=RIGHT; break;
             case 'q':
                 running = 0;break;
+                /*
             case 'g':
                 lengthen_snake(snake, &score); break;
-
+            */
         }
 
         create_board(board);
